@@ -56,4 +56,4 @@ register("command", Jerry).setCommandName("ij").setAliases(["ijerry", "ijerrys",
 registerWhen(register("chat", Pearls).setCriteria("Starting in 3 seconds."), () => config().AutoGFS && config().GFSPearls)
 registerWhen(register("chat", Jerry).setCriteria("Starting in 2 seconds."), () => config().AutoGFS && config().GFSJerry)
 
-registerWhen(register("chat", (event) => { cancel(event) }).setCriteria(/Moved .+ (Ender Pearl|Inflatable Jerry) from your Sacks to your inventory\./), () => config().AutoGFS && (config().GFSPearls || config().GFSJerry))
+registerWhen(register("chat", (event) => { cancel(event) }).setCriteria(/Moved .+ (Ender Pearl|Inflatable Jerry) from your Sacks to your inventory\./), () => config().GFSPearls || config().GFSJerry)
