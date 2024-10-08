@@ -51,9 +51,11 @@ function Jerry() {
 }
 
 register("command", Pearls).setCommandName("ep").setAliases(["epearl", "epearls", "pearls"])
-register("command", Jerry).setCommandName("ij").setAliases(["ijerry", "ijerrys", "jerry", "jerrys", "jerries", "ijerries"])
+register("command", Jerry).setCommandName("ij").setAliases(["ijerry", "ijerrys", "jerrys", "jerries", "ijerries"])
 
 registerWhen(register("chat", Pearls).setCriteria("Starting in 3 seconds."), () => config().AutoGFS && config().GFSPearls)
 registerWhen(register("chat", Jerry).setCriteria("Starting in 2 seconds."), () => config().AutoGFS && config().GFSJerry)
 
-registerWhen(register("chat", (event) => { cancel(event) }).setCriteria(/Moved .+ (Ender Pearl|Inflatable Jerry) from your Sacks to your inventory\./), () => config().GFSPearls || config().GFSJerry)
+registerWhen(register("chat", (regex, msg) => {
+    cancel(msg)
+}).setCriteria(/Moved .+ (Ender Pearl|Inflatable Jerry) from your Sacks to your inventory\./), () => config().GFSPearls || config().GFSJerry)

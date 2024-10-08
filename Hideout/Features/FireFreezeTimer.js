@@ -1,11 +1,8 @@
 import config from "../data/config"
-import {
-    RED,
-    AQUA
-} from "../utils/stuff"
+import { RED, AQUA, IsInDungeon } from "../utils/stuff"
+import { registerWhen } from "../../BloomCore/utils/Utils"
 
-register("chat", () =>{
-    if (!config().FireFreezeToggle) return;
+registerWhen(register("chat", () =>{
     new Thread(() => {
         Thread.sleep(200);
         World.playSound("note.pling", 2, 1);
@@ -26,4 +23,4 @@ register("chat", () =>{
         World.playSound("random.anvil_land", 2, 1);
         Client.showTitle(`${AQUA}Use FFS NOW`, "", 0, 21, 0);
     }).start();
-}).setCriteria("[BOSS] The Professor: Oh? You found my Guardians' one weakness?")
+}).setCriteria("[BOSS] The Professor: Oh? You found my Guardians' one weakness?"), () => config().FireFreezeToggle && IsInDungeon())

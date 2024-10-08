@@ -1,9 +1,5 @@
-import {
-    idkwhatimdoing
-} from "./utils/idk"
-import {
-    sayCommands
-} from "./Features/Commands"
+import { idkwhatimdoing } from "./utils/idk"
+import { sayCommands } from "./Features/Commands"
 
 if (idkwhatimdoing.data.firstload) {
     ChatLib.chat("\n&b&lThanks for downloading Hideout")

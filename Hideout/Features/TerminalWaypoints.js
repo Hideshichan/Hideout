@@ -65,10 +65,10 @@ function DoStuff(term, color) {
                         )
                     }
                 }
-            })
-        }
+            }})
     })
 }
+
 
 registerWhen(register("renderWorld", () => 
     DoStuff(config().WhichTerm, config().TermWaypointsColor)

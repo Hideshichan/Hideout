@@ -163,3 +163,26 @@ export function getPhase() {
 export function IsInDungeon() {
   return Dungeon.inDungeon
 }
+
+export const joininstancecommands = {
+  "t1" : "joininstance KUUDRA_NORMAL",
+  "t2" : "joininstance KUUDRA_HOT",
+  "t3" : "joininstance KUUDRA_BURNING",
+  "t4" : "joininstance KUUDRA_FIERY",
+  "t5" : "joininstance KUUDRA_INFERNAL",
+  "fe" : "joininstance CATACOMBS_ENTRANCE",
+  "f1" : "joininstance CATACOMBS_FLOOR_ONE",
+  "f2" : "joininstance CATACOMBS_FLOOR_TWO",
+  "f3" : "joininstance CATACOMBS_FLOOR_THREE",
+  "f4" : "joininstance CATACOMBS_FLOOR_FOUR",
+  "f5" : "joininstance CATACOMBS_FLOOR_FIVE",
+  "f6" : "joininstance CATACOMBS_FLOOR_SIX",
+  "f7" : "joininstance CATACOMBS_FLOOR_SEVEN",
+  "m1" : "joininstance MASTER_CATACOMBS_FLOOR_ONE",
+  "m2" : "joininstance MASTER_CATACOMBS_FLOOR_TWO",
+  "m3" : "joininstance MASTER_CATACOMBS_FLOOR_THREE",
+  "m4" : "joininstance MASTER_CATACOMBS_FLOOR_FOUR",
+  "m5" : "joininstance MASTER_CATACOMBS_FLOOR_FIVE",
+  "m6" : "joininstance MASTER_CATACOMBS_FLOOR_SIX",
+  "m7" : "joininstance MASTER_CATACOMBS_FLOOR_SEVEN"
+}

@@ -6,12 +6,35 @@ import { DisconnectFromServer, RED } from "../utils/stuff"
 const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
 
 // General
+.addSwitch({
+    category: "General",
+    configName: "CloakNotifier",
+    title: "Cloak notifier",
+    description: "Sends an alert when wither cloak is toggled on/off",
+    subcategory: ""
+})
+.addSwitch({
+    category: "General",
+    configName: "RemoveSelfieCamera",
+    title: "Remove selfie camera",
+    description: "Removes selfie camera",
+    subcategory: ""
+})
+.addSwitch({
+    category: "General",
+    configName: "RemoveWithWitherBlade",
+    title: "Only remove when holding wither blade",
+    description: "Only removes selfie camera when holding a weapon with wither impact",
+    shouldShow(data) {
+        return data.RemoveSelfieCamera
+    }
+})
 .addButton({
     category: "General",
     configName: "GithubPage",
     title: "GitHub",
     description: "GitHub page for updating",
-    subcategory: "",
+    subcategory: "Misc",
     placeHolder: "[ Click me! ]",
     onClick() {
         java.awt.Desktop.getDesktop().browse(new java.net.URI("https://github.com/Hideshichan/Hideout/releases"))
@@ -21,7 +44,7 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
     category: "General",
     configName: "ElEpicTroll",
     title: "Click if pro gamer",
-    description: "",
+    description: "Misc",
     placeHolder: "[ Click me! ]",
     onClick() {
         Client.currentGui.close()
@@ -35,26 +58,11 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
             §7Ban ID: §r#783A8N7C
             §7Sharing your Ban ID may affect the proccessing of your appeal!
 
-            (we do a bit of trolling :p)
             `)
 
        , 3000)
     }
 })
-.addSwitch({
-    category: "General",
-    configName: "CloakNotifier",
-    title: "Cloak notifier",
-    description: "Sends an alert when wither cloak is toggled on/off",
-    subcategory: ""
-})
-/*.addSwitch({
-    category: "General",
-    configName: "Hideplayers",
-    title: "Hide Players",
-    description: `Hide other players \n${RED}MIGHT NOT WORK`,
-    subcategory: ""
-})*/
 
 // Rift
 .addSwitch({
