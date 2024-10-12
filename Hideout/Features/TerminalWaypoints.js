@@ -50,24 +50,17 @@ function DoStuff(term, color) {
                     color[0], color[1], color[2],
                     0.8, false, 100
                 )
-
+    
                 if (config().TermTracers) {
                     drawTrace(
                         termCoords[0], termCoords[1], termCoords[2],
                         color[0], color[1], color[2],
-                        0.8, false, 100
                     )
-    
-                    if (config().TermTracers) {
-                        drawTrace(
-                            termCoords[0], termCoords[1], termCoords[2],
-                            color[0], color[1], color[2],
-                        )
-                    }
                 }
-            }})
-    })
-}
+            }
+        })
+    }
+)}
 
 
 registerWhen(register("renderWorld", () => 
