@@ -1,7 +1,7 @@
 // Make sure these go to the right directory 
 import Settings from "../../Amaterasu/core/Settings"
 import DefaultConfig from "../../Amaterasu/core/DefaultConfig"
-import { DisconnectFromServer, RED, BOLD } from "../utils/stuff"
+import { DisconnectFromServer, RED, BOLD, RESET, AQUA } from "../utils/stuff"
 
 const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
 
@@ -44,7 +44,7 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
     category: "General",
     configName: "ElEpicTroll",
     title: "Click if pro gamer",
-    description: "Misc",
+    description: "h",
     placeHolder: "[ Click me! ]",
     onClick() {
         Client.currentGui.close()
@@ -272,6 +272,12 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
     title: "Crate Priority",
     description: `Displays what crate is missing and what you should do in each situation.\n${RED}${BOLD}Requires No Pre! from all party members.`,
     subcategory: "P1"
+})
+.addSwitch({
+    category: "Kuudra",
+    configName: "LLalert",
+    title: "Lifeline alert",
+    description: `Sends an alert when ${RED}not${RESET} in lifeline range\n${BOLD}${AQUA}Only works in kuudra and when wearing a chestplate with lifeline`
 })
 
 const setting = new Settings("Hideout", DefaultConf, "data/ColorScheme.json").setCommand("hideout",["ho","hide"])

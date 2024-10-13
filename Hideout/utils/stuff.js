@@ -191,26 +191,22 @@ export function getPre() {
   const x = Player.getX()
   const y = Player.getY()
   const z = Player.getZ()
-  if(config().crates == true) {
-    if (z > -100){
-      if(x > -90){
-        pre = 'EQUALS';
-      }
-      if(x < -90){
-        pre = 'SLASH';
-      }
+  if (z > -100){
+    if(x > -90){
+      pre = 'EQUALS';
     }
-    if ( z < -100){
-      if ( x > -90){
-        pre = 'TRI';
-      }
-      if ( x < -90){
-        pre = 'X';
-      }
-        
+    if(x < -90){
+      pre = 'SLASH';
     }
-    branding(`${RED} PRE = ${ pre }`)
-    Client.showTitle(`${RED}PRE = ${pre}`, "", 0, 40, 0,)
+  }
+  if ( z < -100){
+    if ( x > -90){
+      pre = 'TRI';
+    }
+    if ( x < -90){
+      pre = 'X';
+    }
+  branding(`On pre: ${pre}!`)
   }
   return pre
 }
