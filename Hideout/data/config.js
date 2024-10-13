@@ -268,16 +268,17 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
 // Kuudra
 .addSwitch({
     category: "Kuudra",
+    configName: "LLalert",
+    title: "Lifeline alert",
+    description: `Sends an alert when ${RED}not${RESET} in lifeline range\n${BOLD}${AQUA}Only works in kuudra and when wearing a chestplate with lifeline`,
+    subcategory: "General"
+})
+.addSwitch({
+    category: "Kuudra",
     configName: "CratePriority",
     title: "Crate Priority",
     description: `Displays what crate is missing and what you should do in each situation.\n${RED}${BOLD}Requires No Pre! from all party members.`,
     subcategory: "P1"
-})
-.addSwitch({
-    category: "Kuudra",
-    configName: "LLalert",
-    title: "Lifeline alert",
-    description: `Sends an alert when ${RED}not${RESET} in lifeline range\n${BOLD}${AQUA}Only works in kuudra and when wearing a chestplate with lifeline`
 })
 
 const setting = new Settings("Hideout", DefaultConf, "data/ColorScheme.json").setCommand("hideout",["ho","hide"])
