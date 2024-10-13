@@ -1,7 +1,7 @@
 // Make sure these go to the right directory 
 import Settings from "../../Amaterasu/core/Settings"
 import DefaultConfig from "../../Amaterasu/core/DefaultConfig"
-import { DisconnectFromServer, RED } from "../utils/stuff"
+import { DisconnectFromServer, RED, BOLD } from "../utils/stuff"
 
 const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
 
@@ -263,6 +263,15 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
     shouldShow(data) {
         return data.MiniTracker
     }
+})
+
+// Kuudra
+.addSwitch({
+    category: "Kuudra",
+    configName: "CratePriority",
+    title: "Crate Priority",
+    description: `Displays what crate is missing and what you should do in each situation.\n${RED}${BOLD}Requires No Pre! from all party members.`,
+    subcategory: "P1"
 })
 
 const setting = new Settings("Hideout", DefaultConf, "data/ColorScheme.json").setCommand("hideout",["ho","hide"])

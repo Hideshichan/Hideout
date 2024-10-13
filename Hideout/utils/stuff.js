@@ -186,3 +186,40 @@ export const joininstancecommands = {
   "m6" : "joininstance MASTER_CATACOMBS_FLOOR_SIX",
   "m7" : "joininstance MASTER_CATACOMBS_FLOOR_SEVEN"
 }
+
+export function getPre() {
+  const x = Player.getX()
+  const y = Player.getY()
+  const z = Player.getZ()
+  if(config().crates == true) {
+    if (z > -100){
+      if(x > -90){
+        pre = 'EQUALS';
+      }
+      if(x < -90){
+        pre = 'SLASH';
+      }
+    }
+    if ( z < -100){
+      if ( x > -90){
+        pre = 'TRI';
+      }
+      if ( x < -90){
+        pre = 'X';
+      }
+        
+    }
+    branding(`${RED} PRE = ${ pre }`)
+    Client.showTitle(`${RED}PRE = ${pre}`, "", 0, 40, 0,)
+  }
+  return pre
+}
+
+export function getCurrentWorld() {
+  if (!World.isLoaded()) return
+    
+  const match = TabList.getUnformattedNames().join().match(/(Area|Dungeon): ([\w\d ]+)/)
+  if (!match) return null
+
+  return match[2]
+}
