@@ -275,6 +275,23 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
 })
 .addSwitch({
     category: "Kuudra",
+    configName: "MuteTerror",
+    title: "Mute annoying terror sounds",
+    description: "Self explanatory",
+    subcategory: "General"
+})
+.addSwitch({
+    category: "Kuudra",
+    configName: "CatMode",
+    title: "Replace with meows",
+    description: "Replaces the terror sounds with meows",
+    subcategory: "General",
+    shouldShow(data) {
+        return data.MuteTerror
+    }
+})
+.addSwitch({
+    category: "Kuudra",
     configName: "CratePriority",
     title: "Crate Priority",
     description: `Displays what crate is missing and what you should do in each situation.\n${RED}${BOLD}Requires No Pre! from all party members.`,
