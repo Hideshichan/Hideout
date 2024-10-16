@@ -14,3 +14,6 @@ import "./Features/Terrorsounds"
 import "./Features/Wish"
 import "./firstload"
 import "./Autoupdater"
+import { branding, getModuleVersion } from "./utils/stuff"
+
+branding(`Loaded version: ${getModuleVersion()}`)
