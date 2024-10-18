@@ -26,7 +26,7 @@ function IsSpiritEquipped() {
     return Player.armor.getHelmet().getName().includes("Spirit Mask")
 }
 
-register("chat", event => {
+register("chat", (event) => {
     if (!config().SwapMask) return;
     const msg = ChatLib.getChatMessage(event).removeFormatting()
     

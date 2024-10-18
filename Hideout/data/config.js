@@ -282,12 +282,59 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
 })
 .addSwitch({
     category: "Kuudra",
-    configName: "CatMode",
-    title: "Replace with meows",
-    description: "Replaces the terror sounds with meows",
+    configName: "CustomTerrorSoundToggle",
+    title: "Replace with custom sound?",
+    description: "Replaces the terror sounds with a custom sound",
     subcategory: "General",
     shouldShow(data) {
         return data.MuteTerror
+    }
+})
+.addTextInput({
+    category: "Kuudra",
+    configName: "CustomTerrorSound",
+    title: "What to use as custom sound",
+    description: "",
+    subcategory: "General",
+    shouldShow(data) {
+        return data.CustomTerrorSoundToggle
+    }
+})
+.addButton({
+    category: "Kuudra",
+    configName: "AllSoundsPage",
+    title: "List of all sounds",
+    description: "Click to see all the available sounds to be used",
+    subcategory: "General",
+    onClick() {
+        java.awt.Desktop.getDesktop().browse(new java.net.URI("https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/mapping-and-modding-tutorials/2213619-1-8-all-playsound-sound-arguments"))
+    },
+    shouldShow(data) {
+        return data.CustomTerrorSoundToggle && data.MuteTerror
+    }
+})
+.addSlider({
+    category: "Kuudra",
+    configName: "CustomTerrorSoundPitch",
+    title: "Pitch",
+    description: "Pitch for the custom sound\n2 is default",
+    subcategory: "General",
+    options: [1, 4],
+    value: 2,
+    shouldShow(data) {
+        return data.CustomTerrorSoundToggle && data.MuteTerror
+    }
+})
+.addSlider({
+    category: "Kuudra",
+    configName: "CustomTerrorSoundVolume",
+    title: "Volume",
+    description: "Volume for the custom sound\n1 is default",
+    subcategory: "General",
+    options: [1, 4],
+    value: 1,
+    shouldShow(data) {
+        return data.CustomTerrorSoundToggle && data.MuteTerror
     }
 })
 .addSwitch({

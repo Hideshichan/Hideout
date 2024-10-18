@@ -20,4 +20,4 @@ registerWhen(register("step", () => {
     if (health > lifelineMinimum) {
         Client.showTitle(`${RED}NOT LIFELINING!`, "", 0, 20, 0)
     }
-}).setDelay(1), () => config().LLalert, getCurrentWorld == "Kuudra")
+}).setDelay(1), () => config().LLalert, getCurrentWorld() == "Kuudra", IsWearingLL())
