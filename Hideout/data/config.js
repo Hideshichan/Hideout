@@ -297,7 +297,7 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
     description: "",
     subcategory: "General",
     shouldShow(data) {
-        return data.CustomTerrorSoundToggle
+        return data.CustomTerrorSoundToggle && data.MuteTerror
     }
 })
 .addButton({
