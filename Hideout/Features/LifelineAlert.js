@@ -14,10 +14,13 @@ function IsWearingLL() {
     return "lifeline" in NBT.tag.ExtraAttributes.attributes
 }
 
-registerWhen(register("step", () => {
+registerWhen(register("tick", () => {
     const health = Player.getHP()
     const lifelineMinimum = 40 * 0.2
     if (health > lifelineMinimum) {
-        Client.showTitle(`${RED}NOT LIFELINING!`, "", 0, 20, 0)
+        if (config().LLalertSound) {
+            World.playSound("random.anvil_land", 0.2, 1)
+        }
+        Client.showTitle(`${RED}NOT LIFELINING!`, "", 0, 2, 0)
     }
-}).setDelay(1), () => config().LLalert, getCurrentWorld() == "Kuudra", IsWearingLL())
+}), () => config().LLalert && IsWearingLL() && getCurrentWorld() == "Kuudra")

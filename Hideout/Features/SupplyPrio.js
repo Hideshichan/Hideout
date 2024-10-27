@@ -3,6 +3,10 @@ import { getPre, getCurrentWorld, LIGHT_PURPLE, BOLD, AQUA, branding, RED } from
 import { registerWhen } from "../../BloomCore/utils/Utils"
 
 
+// CREDITS TO the_garbageman09
+// https://www.chattriggers.com/modules/v/CratePriority
+
+
 //Getting the pre
 registerWhen(register("chat", () => {
     pre = getPre()

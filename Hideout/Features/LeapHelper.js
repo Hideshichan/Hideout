@@ -1,8 +1,5 @@
 import config from "../data/config"
-import {
-    branding,
-    RED
-} from "../utils/stuff"
+import { branding, RED } from "../utils/stuff"
 import { registerWhen } from "../../BloomCore/utils/Utils"
 
 let hide = false

@@ -275,6 +275,16 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
 })
 .addSwitch({
     category: "Kuudra",
+    configName: "LLalertSound",
+    title: "Adds an anvil sound to the lifeline alert",
+    description: `\n${RED}${BOLD}This is VERY loud and annoying.\n${RED}${BOLD}You have been warned.`,
+    subcategory: "General",
+    shouldShow(data) {
+        return data.LLalert
+    }
+})
+.addSwitch({
+    category: "Kuudra",
     configName: "MuteTerror",
     title: "Mute annoying terror sounds",
     description: "Self explanatory",
@@ -317,10 +327,10 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
     category: "Kuudra",
     configName: "CustomTerrorSoundPitch",
     title: "Pitch",
-    description: "Pitch for the custom sound\n2 is default",
+    description: "Pitch for the custom sound\n1 is default",
     subcategory: "General",
     options: [1, 4],
-    value: 2,
+    value: 1,
     shouldShow(data) {
         return data.CustomTerrorSoundToggle && data.MuteTerror
     }

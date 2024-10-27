@@ -1,7 +1,6 @@
 import config from "../data/config"
-import {
-    RED
-} from "../utils/stuff"
+import { RED } from "../utils/stuff"
+import { registerWhen } from "../../BloomCore/utils/Utils"
 
 // Massive credits to Noamm9 for the new code so its actually fucking readable :sob:
 
@@ -26,8 +25,7 @@ function IsSpiritEquipped() {
     return Player.armor.getHelmet().getName().includes("Spirit Mask")
 }
 
-register("chat", (event) => {
-    if (!config().SwapMask) return;
+registerWhen(register("chat", (event) => {
     const msg = ChatLib.getChatMessage(event).removeFormatting()
     
     if (msg == SwapTriggermsgs[config().WhenMask]) {
@@ -42,4 +40,4 @@ register("chat", (event) => {
         if (!IsBonzoEquipped() || !IsSpiritEquipped()) return;
         Client.showTitle(`${RED}SWAP BACK HELMET`, "", 0, 20, 0)
     }
-})
+}), () => config().SwapMask)

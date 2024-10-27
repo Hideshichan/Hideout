@@ -206,7 +206,6 @@ export function getPre() {
     if ( x < -90){
       pre = 'X';
     }
-  branding(`On pre: ${pre}!`)
   }
   return pre
 }
