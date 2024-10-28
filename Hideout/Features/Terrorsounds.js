@@ -3,13 +3,9 @@ import { registerWhen, getSkyblockItemID } from "../../BloomCore/utils/Utils"
 
 function IsWearingTerror() {
     const helmet = Player.armor.getHelmet()
-    if (!helmet) return false
     const chestplate = Player.armor.getChestplate()
-    if (!chestplate) return false
     const leggings = Player.armor.getLeggings()
-    if (!leggings) return false
     const boots = Player.armor.getBoots()
-    if (!boots) return false
 
     return helmet.getName().includes("Terror") || chestplate.getName().includes("Terror") || leggings.getName().includes("Terror") || boots.getName().includes("Terror")
 }
