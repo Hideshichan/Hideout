@@ -1,5 +1,5 @@
 import config from "../data/config"
-import { BOLD,RED, IsInDungeon } from "../utils/stuff"
+import { BOLD, RED, IsInDungeon } from "../utils/stuff"
 import { registerWhen } from "../../BloomCore/utils/Utils"
 
 // Wish party msg

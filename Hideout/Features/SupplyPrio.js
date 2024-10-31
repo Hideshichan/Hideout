@@ -10,7 +10,7 @@ import { registerWhen } from "../../BloomCore/utils/Utils"
 //Getting the pre
 registerWhen(register("chat", () => {
     pre = getPre()
-}).setCriteria("[NPC] Elle: Head over to the main platform, I will join you when I get a bite!"), () => config().CratePriority, getCurrentWorld() == "Kuudra")
+}).setCriteria("[NPC] Elle: Head over to the main platform, I will join you when I get a bite!"), () => config().CratePriority && getCurrentWorld() == "Kuudra")
 
 // Finding what is missing and notify
 registerWhen(register("chat", (player, crate) => {
@@ -149,4 +149,4 @@ registerWhen(register("chat", (player, crate) => {
         }
     }
     branding(`MISSING = ${RED}${ missing }`)
-}).setCriteria('Party > ${player}: No ${crate}!'), () => config().CratePriority, getCurrentWorld() == "Kuudra")
+}).setCriteria('Party > ${player}: No ${crate}!'), () => config().CratePriority && getCurrentWorld() == "Kuudra")

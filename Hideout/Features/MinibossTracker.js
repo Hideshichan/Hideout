@@ -1,4 +1,5 @@
 import config from "../data/config"
+import { getCurrentWorld } from "../utils/stuff"
 import { registerWhen } from "../../BloomCore/utils/Utils"
 
 let counter = 0
@@ -14,4 +15,4 @@ registerWhen(register('chat', (boss, event) => {
     if (counter === 4) ChatLib.command('pc 4/4 NEED TO RESET');
     else ChatLib.command(`pc ${targetMinis[config().PickMini]}: ${counter}/4`);
   }
-}).setCriteria(/^(BLADESOUL|BARBARIAN DUKE X|ASHFANG|MAGE OUTLAW|MAGMA BOSS) DOWN!$/), () => config().MiniTracker)
+}).setCriteria(/^(BLADESOUL|BARBARIAN DUKE X|ASHFANG|MAGE OUTLAW|MAGMA BOSS) DOWN!$/), () => config().MiniTracker && getCurrentWorld() == "Crimson Isle")
