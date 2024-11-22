@@ -2,7 +2,7 @@ import config from "../data/config"
 import { RED, BOLD, getCurrentWorld } from "../utils/stuff"
 import { registerWhen } from "../../BloomCore/utils/Utils"
 
-// Rift time notification-
+// Rift time notification
 registerWhen(register("chat", () => {
     World.playSound("note.pling", 2, 1);
     World.playSound("note.pling", 2, 1);
