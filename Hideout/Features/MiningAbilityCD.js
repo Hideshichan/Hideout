@@ -49,29 +49,24 @@ function getfueltank() {
 
 registerWhen(register("chat", () =>{
     bal_equipped = true
-    ChatLib.chat("bal on")
 }).setCriteria("Autopet equipped your [Lvl 100] Bal! VIEW RULE"), () => config().MiningAbilityTimer)
 
 registerWhen(register("chat", () =>{
     bal_equipped = false
-    ChatLib.chat("bal off")
 }).setCriteria(/Autopet equipped your \[Lvl \d+\] (?!Bal\b)(\w+)! VIEW RULE/), () => config().MiningAbilityTimer)
 
 registerWhen(register("chat", () =>{
     skymall_toggle = true
-    ChatLib.chat("skymall on")
 }).setCriteria("New buff: -20% Pickaxe Ability cooldowns."), () => config().MiningAbilityTimer)
 
 registerWhen(register("chat", () =>{
     skymall_toggle = false
-    ChatLib.chat("skymall off")
 }).setCriteria(/^New buff: (?!-20% Pickaxe Ability cooldowns\.$).*/), () => config().MiningAbilityTimer)
 
 registerWhen(register("chat", (ability) => {
     currenttank = getfueltank()
     startTime = Date.now()
     cooldown = cooldowns[ability]
-    ChatLib.chat("i no break regex works")
 }).setCriteria(/You used your (Mining Speed Boost|Maniac Miner|Pickobulus|Sheer Force|Gemstone Infusion|Anomalous Desire) Pickaxe Ability!/), () => config().MiningAbilityTimer)
 
 registerWhen(register("renderOverlay", () => {
