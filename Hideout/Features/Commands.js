@@ -1,5 +1,5 @@
 // just try get it to work lol
-import { CloseGame, joininstancecommands, branding, AQUA } from "../utils/stuff"
+import { CloseGame, joininstancecommands, branding, AQUA, getitemNBT } from "../utils/stuff"
 
 export function sayCommands() {
   ChatLib.chat('\n&3&lCOMMANDS:')
@@ -68,3 +68,8 @@ Object.keys(joininstancecommands).forEach(cmd => {
       ChatLib.command(`${joininstancecommands[cmd]}`)
   }).setName(cmd)
 })
+
+register("command", () => {
+  branding("Logged held item's NBT to console")
+  getitemNBT()
+}).setCommandName("GETITEMNBT")

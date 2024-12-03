@@ -3,6 +3,9 @@ import Settings from "../../Amaterasu/core/Settings"
 import DefaultConfig from "../../Amaterasu/core/DefaultConfig"
 import { DisconnectFromServer, RED, BOLD, RESET, AQUA } from "../utils/stuff"
 
+// Moveable shit (maybe)
+export const MiningAbilityTimerGui = new Gui()
+
 const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
 
 // General
@@ -85,6 +88,40 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
     title: "Rift Time Party Message",
     description: "Sends a message in party chat saying you're about to get kicked out",
     subcategory: ""
+})
+
+// Mining
+.addSwitch({
+    category: "Mining",
+    configName: "MiningAbilityTimer",
+    title: "Mining ability cooldown tracker",
+    description: "A (what should be) accurate mining ability cooldown timer",
+    subcategory: ""
+})
+.addButton({
+    category: "Mining",
+    configName: "moveMiningAbilityTimer",
+    title: "Move the gui",
+    description: "U can probably set an exact pos somewhere",
+    subcategory: "",
+    shouldShow(data) {
+        return data.MiningAbilityTimer
+    },
+    onClick() {
+        MiningAbilityTimerGui.open()
+    }
+})
+.addDropDown({
+    category: "Mining",
+    configName: "MiningAbilityTimerColor",
+    title: "Change the color",
+    description: "A color picker doesnt work with how ive coded it cry about it",
+    options: ["§0Black", "§1Dark blue", "§2Dark green", "§3Dark aqua", "§4Dark red", "§5Dark purple", "§6Gold", "§7Gray", "§8Dark gray", "§9Blue", "§aGreen", "§bAqua", "§cRed", "§Light purple", "§eYellow", "§fWhite"],
+    value: 0,
+    subcategory: "",
+    shouldShow(data) {
+        return data.MiningAbilityTimer
+    }
 })
 
 // Dungeons

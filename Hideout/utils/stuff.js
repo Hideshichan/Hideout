@@ -218,3 +218,7 @@ export function getCurrentWorld() {
 
   return match[2]
 }
+
+export function getitemNBT() {
+  console.log(Player.getHeldItem().getNBT())
+}

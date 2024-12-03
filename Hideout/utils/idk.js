@@ -1,7 +1,11 @@
 import PogObject from "../../PogData"
+import { MiningAbilityTimerGui } from "../data/config"
 
-export class idkwhatimdoing {
-    static data = new PogObject("Hideout", {
-        firstload: true
-    }, "data/.data.json")
-}
+export const idkwhatimdoing = new PogObject("Hideout", {
+    firstload: true,
+    MiningAbilityTimerGui: {
+        x: Renderer.screen.getWidth() / 2,
+        y: Renderer.screen.getHeight() / 2,
+        scale: 1
+    }
+}, "data/.data.json")
