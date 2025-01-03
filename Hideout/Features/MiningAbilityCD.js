@@ -2,10 +2,10 @@ import config from "../data/config"
 import { MiningAbilityTimerGui } from "../data/config"
 import { idkwhatimdoing } from "../utils/idk"
 import { registerWhen } from "../../BloomCore/utils/Utils"
+import { branding } from "../utils/stuff"
 
 let colors = ["§0", "§1", "§2", "§3", "§4", "§5", "§6", "§7", "§8", "§9", "§a", "§b", "§c", "§d", "§e", "§f"]
-let startTime, currenttank, cooldown
-let text = new Text('').setScale(idkwhatimdoing.MiningAbilityTimerGui.scale * 5).setAlign("CENTER").setShadow(true).setColor(Renderer.YELLOW)
+let startTime, currenttank, cooldown, modified
 let tanks = {
     "none" : 1,
     "mithril_fuel_tank" : 0.98,
@@ -26,7 +26,7 @@ let bal_equipped = false
 let cooldowns = {
     "Mining Speed Boost" : 120000,
     "Maniac Miner" : 120000,
-    "Pickobulus" : 50000,
+    "Pickobulus" : 60000,
     "Sheer Force" : 120000,
     "Gemstone Infusion" : 120000,
     "Anomalous Desire" : 120000
@@ -67,6 +67,13 @@ registerWhen(register("chat", (ability) => {
     currenttank = getfueltank()
     startTime = Date.now()
     cooldown = cooldowns[ability]
+    modified = (cooldown * tanks[currenttank] * bal[bal_equipped.toString()] * skymall[skymall_toggle.toString()]) / 1000
+    branding(`bal: ${bal_equipped}`)
+    branding(`skymall: ${skymall_toggle}`)
+    branding(`ability used: ${ability}`)
+    branding(`fuel tank: ${currenttank}`)
+    branding(`cooldown of ability: ${cooldown}`)
+    branding(`cooldown after buffs: ${modified}`)
 }).setCriteria(/You used your (Mining Speed Boost|Maniac Miner|Pickobulus|Sheer Force|Gemstone Infusion|Anomalous Desire) Pickaxe Ability!/), () => config().MiningAbilityTimer)
 
 registerWhen(register("renderOverlay", () => {
@@ -76,7 +83,6 @@ registerWhen(register("renderOverlay", () => {
         return
     }
     if (!startTime) return
-    const modified = (cooldown * tanks[currenttank] * bal[bal_equipped.toString()] * skymall[skymall_toggle.toString()]) / 1000
     const remaining = (modified - (Date.now() - startTime?? 0) / 1000).toFixed(2)
     if (remaining < 0) return
     
