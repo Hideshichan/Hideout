@@ -68,12 +68,6 @@ registerWhen(register("chat", (ability) => {
     startTime = Date.now()
     cooldown = cooldowns[ability]
     modified = (cooldown * tanks[currenttank] * bal[bal_equipped.toString()] * skymall[skymall_toggle.toString()]) / 1000
-    branding(`bal: ${bal_equipped}`)
-    branding(`skymall: ${skymall_toggle}`)
-    branding(`ability used: ${ability}`)
-    branding(`fuel tank: ${currenttank}`)
-    branding(`cooldown of ability: ${cooldown}`)
-    branding(`cooldown after buffs: ${modified}`)
 }).setCriteria(/You used your (Mining Speed Boost|Maniac Miner|Pickobulus|Sheer Force|Gemstone Infusion|Anomalous Desire) Pickaxe Ability!/), () => config().MiningAbilityTimer)
 
 registerWhen(register("renderOverlay", () => {
@@ -90,14 +84,15 @@ registerWhen(register("renderOverlay", () => {
     Renderer.drawStringWithShadow((`${colors[config().MiningAbilityTimerColor]}${remaining}s`), idkwhatimdoing.MiningAbilityTimerGui.x, idkwhatimdoing.MiningAbilityTimerGui.y)
 }), () => config().MiningAbilityTimer)
 
-// TODO: - Custom location + size
-//       - Color
-
 register("dragged", (_0, _1, x, y, bn) => {
     if (!MiningAbilityTimerGui.isOpen()) return
     if (bn === 2) return
     idkwhatimdoing.MiningAbilityTimerGui.x = x / idkwhatimdoing.MiningAbilityTimerGui.scale
     idkwhatimdoing.MiningAbilityTimerGui.y = y / idkwhatimdoing.MiningAbilityTimerGui.scale
+    ChatLib.clearChat(69421)
+    ChatLib.clearChat(69422)
+    new Message(`§bHideout §8» §7Current x: ${idkwhatimdoing.MiningAbilityTimerGui.x}`).setChatLineId(69421).chat()
+    new Message(`§bHideout §8» §7Current y: ${idkwhatimdoing.MiningAbilityTimerGui.y}`).setChatLineId(69422).chat()
     idkwhatimdoing.save()
 })
 
@@ -107,10 +102,6 @@ register("scrolled", (_0, _1, dir) => {
     else idkwhatimdoing.MiningAbilityTimerGui.scale -= 0.1
     idkwhatimdoing.MiningAbilityTimerGui.scale = Math.round(idkwhatimdoing.MiningAbilityTimerGui.scale * 100) / 100
     ChatLib.clearChat(69420) // Prevent clogging chat by deleting the previous message
-    ChatLib.clearChat(69421)
-    ChatLib.clearChat(69422)
     new Message(`§bHideout §8» §7Current scale: ${idkwhatimdoing.MiningAbilityTimerGui.scale}`).setChatLineId(69420).chat()
-    new Message(`§bHideout §8» §7Current x: ${idkwhatimdoing.MiningAbilityTimerGui.x}`).setChatLineId(69421).chat()
-    new Message(`§bHideout §8» §7Current y: ${idkwhatimdoing.MiningAbilityTimerGui.y}`).setChatLineId(69422).chat()
     idkwhatimdoing.save()
 })
