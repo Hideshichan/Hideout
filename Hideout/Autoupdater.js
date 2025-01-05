@@ -14,7 +14,7 @@ const PrintStream = Java.type("java.io.PrintStream")
 const Byte = Java.type("java.lang.Byte")
 
 
-function urlToFile(url, destination, connecttimeout, readtimeout) {
+function urlToFile(url, destination, connecttimeout, readtimeout) { // Thanks doc, u hate my ass way too much but thanks
     const d = new File(destination)
     d.getParentFile().mkdirs()
     const connection = new URL(url).openConnection()
