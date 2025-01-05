@@ -1,5 +1,8 @@
 // just try get it to work lol
 import { CloseGame, joininstancecommands, branding, AQUA, getitemNBT } from "../utils/stuff"
+import { registerWhen } from "../../BloomCore/utils/Utils"
+
+mpwToggle = false
 
 export function sayCommands() {
   ChatLib.chat('\n&3&lCOMMANDS:')
@@ -73,3 +76,32 @@ register("command", () => {
   branding("Logged held item's NBT to console")
   getitemNBT()
 }).setCommandName("GETITEMNBT")
+
+function warpParty() {
+  if (playercount === playersinparty){
+    ChatLib.command(`p warp`)
+    mpwToggle = false
+  }
+}
+
+register("command", (players) =>{
+  if (!players) {
+    branding("Please enter a name(s).\nSeparate names with a comma and no space (eg: /mpw Deathstreeks,Breefing,15h)")
+  }
+  mpwToggle = true
+  timeout = 500
+  playercount = 0
+  playersinparty = 0
+  players.split(",").forEach(player => {
+    setTimeout(() => {
+      ChatLib.command(`p ${player}`)
+    }, timeout)
+    timeout += 500
+    playercount++
+  })
+}).setCommandName("mpw")
+registerWhen(
+  register("chat", () => {
+  playersinparty++
+  warpParty()
+}).setCriteria(/^(.+)? (\w+) joined the party.$/), () => mpwToggle)
