@@ -38,7 +38,7 @@ function getfueltank() {
     if (!heldItem) return "none";
 
     const nbt = heldItem.getNBT().toObject();
-    if (!nbt || !nbt.tag || !nbt.tag.ExtraAttributes || !Array.isArray(nbt.tag.ExtraAttributes.drill_part_fuel_tank)) {
+    if (!nbt || !nbt.tag || !nbt.tag.ExtraAttributes || !nbt.tag.ExtraAttributes.drill_part_fuel_tank) {
         return "none";
     }
 
