@@ -314,7 +314,7 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
     category: "Kuudra",
     configName: "LLalertSound",
     title: "Adds an anvil sound to the lifeline alert",
-    description: `\n${RED}${BOLD}This is VERY loud and annoying.\n${RED}${BOLD}You have been warned.`,
+    description: `${RED}${BOLD}This is VERY loud and annoying.\n${RED}${BOLD}You have been warned.`,
     subcategory: "General",
     shouldShow(data) {
         return data.LLalert
