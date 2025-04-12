@@ -48,7 +48,7 @@ let cooldowns = {
     "Anomalous Desire2" : 110000,
     "Anomalous Desire3" : 100000,
 }
-let level = config().MiningAbilityLevel + 1 // +1 because the first level is 0, not 1
+let level = 1
 
 
 function getfueltank() {
@@ -65,6 +65,13 @@ function getfueltank() {
         nbt.tag.ExtraAttributes.drill_part_fuel_tank
     );
 }
+
+register('command', () => {
+    branding(`Bal: ${bal_equipped}`)
+    branding(`Skymall: ${skymall_toggle}`)
+    branding(`Tank: ${getfueltank()}`)
+    branding(`Level: ${level}`)
+}).setName('debugmac')
 
 registerWhen(register("chat", () =>{
     bal_equipped = true
@@ -83,6 +90,7 @@ registerWhen(register("chat", () =>{
 }).setCriteria(/^New buff: (?!-20% Pickaxe Ability cooldowns\.$).*/), () => config().MiningAbilityTimer)
 
 registerWhen(register("chat", (ability) => {
+    level = config().MiningAbilityLevel + 1 // +1 because the first level in config is 0, not 1
     currenttank = getfueltank()
     startTime = Date.now()
     cooldown = cooldowns[ability+level.toString()]
