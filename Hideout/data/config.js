@@ -113,6 +113,18 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
 })
 .addDropDown({
     category: "Mining",
+    configName: "MiningAbilityLevel",
+    title: "Mining ability level",
+    description: "Level of your mining ability\n1 is no blegg and no core of the mountain, 2 is no blegg but core of the mountain or vice versa, 3 is blegg and core of the mountain",
+    subcategory: "",
+    options: ["1", "2", "3"],
+    value: 0,
+    shouldShow(data) {
+        return data.MiningAbilityTimer
+    }
+})
+.addDropDown({
+    category: "Mining",
     configName: "MiningAbilityTimerColor",
     title: "Change the color",
     description: "A color picker doesnt work with how ive coded it cry about it",
@@ -314,7 +326,7 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
     category: "Kuudra",
     configName: "LLalertSound",
     title: "Adds an anvil sound to the lifeline alert",
-    description: `${RED}${BOLD}This is VERY loud and annoying.\n${RED}${BOLD}You have been warned.`,
+    description: `\n${RED}${BOLD}This is VERY loud and annoying.\n${RED}${BOLD}You have been warned.`,
     subcategory: "General",
     shouldShow(data) {
         return data.LLalert
