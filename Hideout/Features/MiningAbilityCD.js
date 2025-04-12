@@ -24,13 +24,31 @@ let skymall = {
 let skymall_toggle = false
 let bal_equipped = false
 let cooldowns = {
-    "Mining Speed Boost" : 120000,
-    "Maniac Miner" : 120000,
-    "Pickobulus" : 60000,
-    "Sheer Force" : 120000,
-    "Gemstone Infusion" : 120000,
-    "Anomalous Desire" : 120000
+    "Mining Speed Boost1" : 120000,
+    "Mining Speed Boost2" : 120000,
+    "Mining Speed Boost3" : 120000,
+
+    "Maniac Miner1" : 120000,
+    "Maniac Miner2" : 120000,
+    "Maniac Miner3" : 120000,
+
+    "Pickobulus1" : 60000,
+    "Pickobulus2" : 50000,
+    "Pickobulus3" : 40000,
+
+    "Sheer Force1" : 120000,
+    "Sheer Force2" : 120000,
+    "Sheer Force3" : 120000,
+
+    "Gemstone Infusion1" : 120000,
+    "Gemstone Infusion2" : 120000,
+    "Gemstone Infusion3" : 120000,
+
+    "Anomalous Desire1" : 120000,
+    "Anomalous Desire2" : 110000,
+    "Anomalous Desire3" : 100000,
 }
+let level = config().MiningAbilityLevel + 1 // +1 because the first level is 0, not 1
 
 
 function getfueltank() {
@@ -39,6 +57,7 @@ function getfueltank() {
 
     const nbt = heldItem.getNBT().toObject();
     if (!nbt || !nbt.tag || !nbt.tag.ExtraAttributes || !nbt.tag.ExtraAttributes.drill_part_fuel_tank) {
+        branding("nbt not found")
         return "none";
     }
 
@@ -53,7 +72,7 @@ registerWhen(register("chat", () =>{
 
 registerWhen(register("chat", () =>{
     bal_equipped = false
-}).setCriteria(/Autopet equipped your \[Lvl \d+\] (?!Bal\b)(\w+)! VIEW RULE/), () => config().MiningAbilityTimer)
+}).setCriteria(/Autopet equipped your \[Lvl \d+\] (?!Bal\b)([A-Za-z]+(?: [A-Za-z]+)*)! VIEW RULE/), () => config().MiningAbilityTimer)
 
 registerWhen(register("chat", () =>{
     skymall_toggle = true
@@ -66,8 +85,8 @@ registerWhen(register("chat", () =>{
 registerWhen(register("chat", (ability) => {
     currenttank = getfueltank()
     startTime = Date.now()
-    cooldown = cooldowns[ability]
-    modified = (cooldown * tanks[currenttank] * bal[bal_equipped.toString()] * skymall[skymall_toggle.toString()]) / 1000
+    cooldown = cooldowns[ability+level.toString()]
+    modified = Math.floor((cooldown * tanks[currenttank] * bal[bal_equipped.toString()] * skymall[skymall_toggle.toString()]) / 1000)
 }).setCriteria(/You used your (Mining Speed Boost|Maniac Miner|Pickobulus|Sheer Force|Gemstone Infusion|Anomalous Desire) Pickaxe Ability!/), () => config().MiningAbilityTimer)
 
 registerWhen(register("renderOverlay", () => {
