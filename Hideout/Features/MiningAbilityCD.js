@@ -88,7 +88,7 @@ register('command', () => {
     branding(`Level: ${level}`)
 }).setName('debugmac')
 
-registerWhen('command', () => {
+register('command', () => {
     skymall_toggle = true // Just incase it bugs like usual
 }).setName('forceskymalltrue')
 
