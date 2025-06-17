@@ -50,11 +50,55 @@ function Jerry() {
     branding(`Gave ${JerrytoGive} Inflatable Jerry to fill stack`)
 }
 
+function BOOM() {
+    const BoomStack = Player.getInventory().getItems().find(a => a?.getName() == "§9Superboom TNT")
+
+    if (!BoomStack) {
+        ChatLib.command(`gfs superboom_tnt 64`)
+        branding("Gave 64 Superboom")
+        return;
+    }
+
+    BoomToGive = 64 - BoomStack.getStackSize()
+
+    if (BoomToGive == 0) {
+        branding("Already at full stack!")
+        return;
+    }
+
+    ChatLib.command(`gfs superboom_tnt ${BoomToGive}`)
+
+    branding(`Gave ${BoomToGive} Superboom to fill stack`)
+}
+
+function Leaps() {
+    const LeapStack = Player.getInventory().getItems().find(a => a?.getName() == "§9Spirit Leap")
+
+    if (!LeapStack) {
+        ChatLib.command(`gfs spirit_leap 16`)
+        branding("Gave 16 Spirit Leaps")
+        return;
+    }
+
+    LeapsToGive = 16 - LeapStack.getStackSize()
+
+    if (LeapsToGive == 0) {
+        branding("Already at full stack!")
+        return;
+    }
+
+    ChatLib.command(`gfs spirit_leap ${LeapsToGive}`)
+
+    branding(`Gave ${LeapsToGive} Spirit Leaps to fill stack`)
+}
+
 register("command", Pearls).setCommandName("ep").setAliases(["epearl", "epearls", "pearls"])
 register("command", Jerry).setCommandName("ij").setAliases(["ijerry", "ijerrys", "jerrys", "jerries", "ijerries"])
 
+registerWhen(register("chat", BOOM).setCriteria("Starting in 4 seconds."), () => config().AutoGFS && config().GFSBoom)
 registerWhen(register("chat", Pearls).setCriteria("Starting in 3 seconds."), () => config().AutoGFS && config().GFSPearls)
-registerWhen(register("chat", Jerry).setCriteria("Starting in 2 seconds."), () => config().AutoGFS && config().GFSJerry)
+registerWhen(register("chat", Leaps).setCriteria("Starting in 2 second."), () => config().AutoGFS && config().GFSLeaps)
+registerWhen(register("chat", Jerry).setCriteria("Starting in 1 seconds."), () => config().AutoGFS && config().GFSJerry)
 
 registerWhen(register("chat", (regex, msg) => {
     cancel(msg)

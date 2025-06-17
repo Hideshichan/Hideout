@@ -23,6 +23,7 @@ let skymall = {
 }
 let skymall_toggle = false
 let bal_equipped = false
+let blegg = false
 let cooldowns = {
     "Mining Speed Boost1" : 120000,
     "Mining Speed Boost2" : 120000,
@@ -66,12 +67,30 @@ function getfueltank() {
     );
 }
 
+function checkForBlegg() {
+    const heldItem = Player.getHeldItem();
+    if (!heldItem) return false;
+
+    const nbt = heldItem.getNBT().toObject();
+    if (!nbt || !nbt.tag || !nbt.tag.ExtraAttributes || !nbt.tag.ExtraAttributes.drill_part_upgrade_module) {
+        return false;
+    }
+
+    return nbt.tag.ExtraAttributes.drill_part_upgrade_module === "goblin_omelette_blue_cheese";
+}
+
 register('command', () => {
+    level = 1 + config().PotMCheck
     branding(`Bal: ${bal_equipped}`)
     branding(`Skymall: ${skymall_toggle}`)
     branding(`Tank: ${getfueltank()}`)
+    branding(`Blegg: ${checkForBlegg()}`)
     branding(`Level: ${level}`)
 }).setName('debugmac')
+
+registerWhen('command', () => {
+    skymall_toggle = true // Just incase it bugs like usual
+}).setName('forceskymalltrue')
 
 registerWhen(register("chat", () =>{
     bal_equipped = true
@@ -90,7 +109,7 @@ registerWhen(register("chat", () =>{
 }).setCriteria(/^New buff: (?!-20% Pickaxe Ability cooldowns\.$).*/), () => config().MiningAbilityTimer)
 
 registerWhen(register("chat", (ability) => {
-    level = config().MiningAbilityLevel + 1 // +1 because the first level in config is 0, not 1
+    level = 1 + config().PotMCheck + checkForBlegg() // This adds a level if PotM is lvl 2+ and another if Blegg is equipped, so lvl 3 total
     currenttank = getfueltank()
     startTime = Date.now()
     cooldown = cooldowns[ability+level.toString()]

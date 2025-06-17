@@ -102,7 +102,7 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
     category: "Mining",
     configName: "moveMiningAbilityTimer",
     title: "Move the gui",
-    description: "U can probably set an exact pos somewhere",
+    description: "You can probably set an exact pos somewhere",
     subcategory: "",
     shouldShow(data) {
         return data.MiningAbilityTimer
@@ -111,14 +111,12 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
         MiningAbilityTimerGui.open()
     }
 })
-.addDropDown({
+.addSwitch({
     category: "Mining",
-    configName: "MiningAbilityLevel",
-    title: "Mining ability level",
-    description: "Level of your mining ability\n1 is no blegg and no core of the mountain, 2 is no blegg but core of the mountain or vice versa, 3 is blegg and core of the mountain",
+    configName: "PotMCheck",
+    title: "Do you have Peak of the Mountain 2?",
+    description: "Makes the timer more accurate",
     subcategory: "",
-    options: ["1", "2", "3"],
-    value: 0,
     shouldShow(data) {
         return data.MiningAbilityTimer
     }
@@ -287,6 +285,26 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
     configName: "GFSJerry",
     title: "Auto GFS Inflatable Jerry",
     description: "Automatically runs /gfs for inflatable jerry to fill stack",
+    subcategory: "Misc",
+    shouldShow(data) {
+        return data.AutoGFS
+    }
+})
+.addSwitch({
+    category: "Dungeons",
+    configName: "GFSBoom",
+    title: "Auto GFS Superboom TNT",
+    description: "Automatically runs /gfs for superboom TNT to fill stack",
+    subcategory: "Misc",
+    shouldShow(data) {
+        return data.AutoGFS
+    }
+})
+.addSwitch({
+    category: "Dungeons",
+    configName: "GFSLeaps",
+    title: "Auto GFS Spirit Leaps",
+    description: "Automatically runs /gfs for spirit leaps to fill stack",
     subcategory: "Misc",
     shouldShow(data) {
         return data.AutoGFS
