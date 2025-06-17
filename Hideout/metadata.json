@@ -2,7 +2,7 @@
   "name": "Hideout",
   "creator": "Hideshi",
   "description": "Some random features I made when bored",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "entry": "index.js",
   "requires": ["BeaconBeam", "Amaterasu", "PogData", "BloomCore"]
 }
