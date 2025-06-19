@@ -58,7 +58,6 @@ function getfueltank() {
 
     const nbt = heldItem.getNBT().toObject();
     if (!nbt || !nbt.tag || !nbt.tag.ExtraAttributes || !nbt.tag.ExtraAttributes.drill_part_fuel_tank) {
-        branding("nbt not found")
         return "none";
     }
 
