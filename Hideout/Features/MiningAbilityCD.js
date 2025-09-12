@@ -11,7 +11,7 @@ let tanks = {
     "mithril_fuel_tank" : 0.98,
     "titanium_fuel_tank" : 0.96,
     "gemstone_fuel_tank" : 0.94,
-    "perfect_fuel_tank" : 0.9
+    "perfectly_cut_fuel_tank" : 0.9
 }
 let bal = {
     "true" : 0.9,
@@ -50,6 +50,7 @@ let cooldowns = {
     "Anomalous Desire3" : 100000,
 }
 let level = 1
+let lastability = ""
 
 
 function getfueltank() {
@@ -79,17 +80,45 @@ function checkForBlegg() {
 }
 
 register('command', () => {
-    level = 1 + config().PotMCheck
+    branding("Debug info for Mining Ability Cooldown Timer:")
+    level = 1 + config().PotMCheck + checkForBlegg()
+    branding(`Last ability used: ${lastability}, cooldown before reductions: ${cooldowns[ability+level.toString()]}s`)
+    bal_equipped = balTabCheck()
     branding(`Bal: ${bal_equipped}`)
     branding(`Skymall: ${skymall_toggle}`)
     branding(`Tank: ${getfueltank()}`)
     branding(`Blegg: ${checkForBlegg()}`)
     branding(`Level: ${level}`)
+    branding(`Cooldown of ${lastability} after reductions: ${Math.floor((cooldown * tanks[currenttank] * bal[bal_equipped.toString()] * skymall[skymall_toggle.toString()]) / 1000)}s`)
 }).setName('debugmac')
 
 register('command', () => {
-    skymall_toggle = true // Just incase it bugs like usual
-}).setName('forceskymalltrue')
+    branding(`Skymall set from ${skymall_toggle} to ${!skymall_toggle}`)
+    skymall_toggle = !skymall_toggle // Just incase it bugs like usual
+}).setName('swapskymallvalue')
+
+register('command', () => {
+    branding(`Bal set from ${bal_equipped} to ${!bal_equipped}`)
+    bal_equipped = !bal_equipped // Just incase ur using bal and not rod swap
+}).setName('swapbalvalue')
+
+function balTabCheck() {
+    const tablist = TabList.getNames();
+    let balString = tablist.findIndex(tab => tab.startsWith(`§r§e§lPet:`));
+    if (balString === -1) {
+        branding("No pet widget found in tab, assuming bal is not equipped, please enable the widget in /tab for more accurate results")
+        return false
+    }
+    balCheck = tablist[balString + 1]
+    balCheck = balCheck.removeFormatting()
+    if (balCheck.includes("[Lvl 100] Bal")) {
+        branding("Bal found as equipped in tab. Automatically applying cooldown reduction.")
+        return true
+    }
+    else {
+        return false
+    }
+}
 
 registerWhen(register("chat", () =>{
     bal_equipped = true
@@ -108,6 +137,8 @@ registerWhen(register("chat", () =>{
 }).setCriteria(/^New buff: (?!-20% Pickaxe Ability cooldowns\.$).*/), () => config().MiningAbilityTimer)
 
 registerWhen(register("chat", (ability) => {
+    lastability = ability
+    bal_equipped = balTabCheck()
     level = 1 + config().PotMCheck + checkForBlegg() // This adds a level if PotM is lvl 2+ and another if Blegg is equipped, so lvl 3 total
     currenttank = getfueltank()
     startTime = Date.now()

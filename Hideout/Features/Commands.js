@@ -27,7 +27,9 @@ export function sayCommands() {
   ChatLib.chat('&d----------------------------------------------')
   ChatLib.chat('&3 /mpw <player1,player2,...> - Sends a party invite to the given players and warps after they all join, will NOT disband after\n')
   ChatLib.chat('&d----------------------------------------------\n')
-  ChatLib.chat('&3 /forceskymalltrue - Forces skymall to be the -20% ability cooldown in settings incase it bugs (do not use if not skymall or else u have to wait 20 mins for it to change)\n')
+  ChatLib.chat('&3 /swapskymallvalue - Swaps the value of skymall 20% cooldown reduction (from true -> false and vice versa) Useful for testing\n')
+  ChatLib.chat('&d----------------------------------------------\n')
+  ChatLib.chat('&3 /swapbalvalue - Swaps the value of bal equipped (from true -> false and vice versa) Useful for testing but will recheck upon using an ability\n')
   ChatLib.chat('&d----------------------------------------------\n')
   ChatLib.chat('&3 /debugmac - Lists all the useful things related to the mining ability cooldown to debug the timer\n')
 }
