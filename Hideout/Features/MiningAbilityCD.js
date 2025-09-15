@@ -5,7 +5,7 @@ import { registerWhen } from "../../BloomCore/utils/Utils"
 import { branding } from "../utils/stuff"
 
 let colors = ["§0", "§1", "§2", "§3", "§4", "§5", "§6", "§7", "§8", "§9", "§a", "§b", "§c", "§d", "§e", "§f"]
-let startTime, currenttank, cooldown, modified
+let startTime, currentTank, cooldown, modified
 let tanks = {
     "none" : 1,
     "mithril_fuel_tank" : 0.98,
@@ -21,8 +21,8 @@ let skymall = {
     "true" : 0.8,
     "false" : 1
 }
-let skymall_toggle = false
-let bal_equipped = false
+let skymallToggle = false
+let balEquipped = false
 let blegg = false
 let cooldowns = {
     "Mining Speed Boost1" : 120000,
@@ -50,7 +50,7 @@ let cooldowns = {
     "Anomalous Desire3" : 100000,
 }
 let level = 1
-let lastability = ""
+let lastAbilityUsed = ""
 
 
 function getfueltank() {
@@ -82,24 +82,24 @@ function checkForBlegg() {
 register('command', () => {
     branding("Debug info for Mining Ability Cooldown Timer:")
     level = 1 + config().PotMCheck + checkForBlegg()
-    branding(`Last ability used: ${lastability}, cooldown before reductions: ${cooldowns[ability+level.toString()]}s`)
-    bal_equipped = balTabCheck()
-    branding(`Bal: ${bal_equipped}`)
-    branding(`Skymall: ${skymall_toggle}`)
+    branding(`Last ability used: ${lastAbilityUsed}, cooldown before reductions: ${cooldowns[ability+level.toString()]}s`)
+    balEquipped = balTabCheck()
+    branding(`Bal: ${balEquipped}`)
+    branding(`Skymall: ${skymallToggle}`)
     branding(`Tank: ${getfueltank()}`)
     branding(`Blegg: ${checkForBlegg()}`)
     branding(`Level: ${level}`)
-    branding(`Cooldown of ${lastability} after reductions: ${Math.floor((cooldown * tanks[currenttank] * bal[bal_equipped.toString()] * skymall[skymall_toggle.toString()]) / 1000)}s`)
+    branding(`Cooldown of ${lastAbilityUsed} after reductions: ${Math.floor((cooldown * tanks[currentTank] * bal[balEquipped.toString()] * skymall[skymallToggle.toString()]) / 1000)}s`)
 }).setName('debugmac')
 
 register('command', () => {
-    branding(`Skymall set from ${skymall_toggle} to ${!skymall_toggle}`)
-    skymall_toggle = !skymall_toggle // Just incase it bugs like usual
+    branding(`Skymall set from ${skymallToggle} to ${!skymallToggle}`)
+    skymallToggle = !skymallToggle // Just incase it bugs like usual
 }).setName('swapskymallvalue')
 
 register('command', () => {
-    branding(`Bal set from ${bal_equipped} to ${!bal_equipped}`)
-    bal_equipped = !bal_equipped // Just incase ur using bal and not rod swap
+    branding(`Bal set from ${balEquipped} to ${!balEquipped}`)
+    balEquipped = !balEquipped // Just incase ur using bal and not rod swap
 }).setName('swapbalvalue')
 
 function balTabCheck() {
@@ -121,29 +121,29 @@ function balTabCheck() {
 }
 
 registerWhen(register("chat", () =>{
-    bal_equipped = true
+    balEquipped = true
 }).setCriteria("Autopet equipped your [Lvl 100] Bal! VIEW RULE"), () => config().MiningAbilityTimer)
 
 registerWhen(register("chat", () =>{
-    bal_equipped = false
+    balEquipped = false
 }).setCriteria(/Autopet equipped your \[Lvl \d+\] (?!Bal\b)([A-Za-z]+(?: [A-Za-z]+)*)! VIEW RULE/), () => config().MiningAbilityTimer)
 
 registerWhen(register("chat", () =>{
-    skymall_toggle = true
+    skymallToggle = true
 }).setCriteria("New buff: -20% Pickaxe Ability cooldowns."), () => config().MiningAbilityTimer)
 
 registerWhen(register("chat", () =>{
-    skymall_toggle = false
+    skymallToggle = false
 }).setCriteria(/^New buff: (?!-20% Pickaxe Ability cooldowns\.$).*/), () => config().MiningAbilityTimer)
 
 registerWhen(register("chat", (ability) => {
-    lastability = ability
-    bal_equipped = balTabCheck()
+    lastAbilityUsed = ability
+    balEquipped = balTabCheck()
     level = 1 + config().PotMCheck + checkForBlegg() // This adds a level if PotM is lvl 2+ and another if Blegg is equipped, so lvl 3 total
-    currenttank = getfueltank()
+    currentTank = getfueltank()
     startTime = Date.now()
     cooldown = cooldowns[ability+level.toString()]
-    modified = Math.floor((cooldown * tanks[currenttank] * bal[bal_equipped.toString()] * skymall[skymall_toggle.toString()]) / 1000)
+    modified = Math.floor((cooldown * tanks[currentTank] * bal[balEquipped.toString()] * skymall[skymallToggle.toString()]) / 1000)
 }).setCriteria(/You used your (Mining Speed Boost|Maniac Miner|Pickobulus|Sheer Force|Gemstone Infusion|Anomalous Desire) Pickaxe Ability!/), () => config().MiningAbilityTimer)
 
 registerWhen(register("renderOverlay", () => {
