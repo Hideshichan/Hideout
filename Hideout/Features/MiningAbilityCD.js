@@ -66,6 +66,15 @@ function getfueltank() {
     );
 }
 
+function getTankColor(tank) {
+    if (tank === "perfectly_cut_fuel_tank") return GREEN;
+    if (tank === "gemstone_fuel_tank") return GOLD;
+    if (tank === "titanium_fuel_tank") return YELLOW;
+    if (tank === "mithril_fuel_tank") return RED;
+    if (tank === "none") return DARK_RED;
+    return RESET; // Default for any unknown tank
+}
+
 function checkForBlegg() {
     const heldItem = Player.getHeldItem();
     if (!heldItem) return false;
@@ -76,15 +85,6 @@ function checkForBlegg() {
     }
 
     return nbt.tag.ExtraAttributes.drill_part_upgrade_module === "goblin_omelette_blue_cheese";
-}
-
-function getTankColor(tank) {
-    if (tank === "perfectly_cut_fuel_tank") return GREEN;
-    if (tank === "gemstone_fuel_tank") return GOLD;
-    if (tank === "titanium_fuel_tank") return YELLOW;
-    if (tank === "mithril_fuel_tank") return RED;
-    if (tank === "none") return DARK_RED;
-    return RESET; // Default for any unknown tank
 }
 
 function calculateCooldown(ability) {
@@ -108,11 +108,12 @@ register('command', () => {
     
     branding(`Last ability used: ${lastability}, cooldown before reductions: ${cooldowns[lastability+level.toString()]}s`)
     bal_equipped = balTabCheck()
-    const clickableMessage = new Message(
+    const clickableMessages = new Message(
         new TextComponent(`§bHideout §8» §rBal: ${bal_equipped ? GREEN : RED}${bal_equipped}${RESET}`).setClick("run_command", "/swapbalvalue").setHoverValue('Click if incorrect!'),
         new TextComponent(`\n§bHideout §8» §rSkymall: ${skymall_toggle ? GREEN : RED}${skymall_toggle}${RESET}`).setClick("run_command", "/swapskymallvalue").setHoverValue('Click if incorrect!')
     );
-    ChatLib.chat(clickableMessage)
+
+    ChatLib.chat(clickableMessages)
     //branding(`Bal: ${bal_equipped}`)
     //branding(`Skymall: ${skymall_toggle}`)
     branding(`Tank: ${getTankColor(getfueltank())}${getfueltank()}${RESET}`)
@@ -148,7 +149,7 @@ register('command', () => {
 
 register('command', (ability) => {
     if (!ability) {
-        branding("Invalid ability name! Valid names are: Mining Speed Boost, Maniac Miner, Pickobulus, Sheer Force, Gemstone Infusion, Tunnel Vision")
+        branding("Invalid ability name! Valid names are: Mining Speed Boost, Maniac Miner, Pickobulus, Sheer Force, Gemstone Infusion, Tunnel Vision\n(Not case-sensitive)")
         return
     }
     
@@ -156,7 +157,7 @@ register('command', (ability) => {
     const correctAbility = Object.keys(cooldowns).find(ab => ab.toLowerCase().startsWith(ability.toLowerCase()))?.replace(/\d+$/, '')
     
     if (!correctAbility) {
-        branding("Invalid ability name! Valid names are: Mining Speed Boost, Maniac Miner, Pickobulus, Sheer Force, Gemstone Infusion, Tunnel Vision")
+        branding("Invalid ability name! Valid names are: Mining Speed Boost, Maniac Miner, Pickobulus, Sheer Force, Gemstone Infusion, Tunnel Vision\n(Not case-sensitive)")
         return
     }
     
@@ -190,13 +191,13 @@ registerWhen(register("chat", () =>{
     bal_equipped = false
 }).setCriteria(/Autopet equipped your \[Lvl \d+\] (?!Bal\b)([A-Za-z]+(?: [A-Za-z]+)*)! VIEW RULE/), () => config().MiningAbilityTimer)
 
-registerWhen(register("chat", () =>{
+register("chat", () =>{
     skymall_toggle = true
-}).setCriteria("New buff: -20% Pickaxe Ability cooldowns."), () => config().MiningAbilityTimer)
+}).setCriteria("New buff: -20% Pickaxe Ability cooldowns.")
 
-registerWhen(register("chat", () =>{
+register("chat", () =>{
     skymall_toggle = false
-}).setCriteria(/^New buff: (?!-20% Pickaxe Ability cooldowns\.$).*/), () => config().MiningAbilityTimer)
+}).setCriteria(/^New buff: (?!-20% Pickaxe Ability cooldowns\.$).*/)
 
 registerWhen(register("chat", (ability) => {
     lastability = ability
@@ -207,6 +208,7 @@ registerWhen(register("chat", (ability) => {
     cooldown = cooldowns[ability+level.toString()]
     modified = Math.floor((cooldown * tanks[currenttank] * bal[bal_equipped.toString()] * skymall[skymall_toggle.toString()]) / 1000)
 }).setCriteria(/You used your (Mining Speed Boost|Maniac Miner|Pickobulus|Sheer Force|Gemstone Infusion|Tunnel Vision) Pickaxe Ability!/), () => config().MiningAbilityTimer && !IsInDungeon())  
+
 registerWhen(register("renderOverlay", () => {
     if (MiningAbilityTimerGui.isOpen() && !startTime) {
         Renderer.scale(idkwhatimdoing.MiningAbilityTimerGui.scale)
@@ -220,6 +222,9 @@ registerWhen(register("renderOverlay", () => {
     Renderer.scale(idkwhatimdoing.MiningAbilityTimerGui.scale)
     Renderer.drawStringWithShadow((`${colors[config().MiningAbilityTimerColor]}${remaining}s`), idkwhatimdoing.MiningAbilityTimerGui.x, idkwhatimdoing.MiningAbilityTimerGui.y)
 }), () => config().MiningAbilityTimer)
+
+
+// Dragging and scaling the GUI are credits to cryleak/serenity (afaik)
 
 register("dragged", (_0, _1, x, y, bn) => {
     if (!MiningAbilityTimerGui.isOpen()) return
