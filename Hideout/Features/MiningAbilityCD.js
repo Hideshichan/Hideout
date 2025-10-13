@@ -2,7 +2,7 @@ import config from "../data/config"
 import { MiningAbilityTimerGui } from "../data/config"
 import { idkwhatimdoing } from "../utils/idk"
 import { registerWhen } from "../../BloomCore/utils/Utils"
-import { branding, RED, RESET, GREEN, GOLD, YELLOW, DARK_RED } from "../utils/stuff"
+import { branding, RED, RESET, GREEN, GOLD, YELLOW, DARK_RED, IsInDungeon } from "../utils/stuff"
 
 let colors = ["§0", "§1", "§2", "§3", "§4", "§5", "§6", "§7", "§8", "§9", "§a", "§b", "§c", "§d", "§e", "§f"]
 let startTime, currenttank, cooldown, modified
@@ -206,8 +206,7 @@ registerWhen(register("chat", (ability) => {
     startTime = Date.now()
     cooldown = cooldowns[ability+level.toString()]
     modified = Math.floor((cooldown * tanks[currenttank] * bal[bal_equipped.toString()] * skymall[skymall_toggle.toString()]) / 1000)
-}).setCriteria(/You used your (Mining Speed Boost|Maniac Miner|Pickobulus|Sheer Force|Gemstone Infusion|Tunnel Vision) Pickaxe Ability!/), () => config().MiningAbilityTimer)
-
+}).setCriteria(/You used your (Mining Speed Boost|Maniac Miner|Pickobulus|Sheer Force|Gemstone Infusion|Tunnel Vision) Pickaxe Ability!/), () => config().MiningAbilityTimer && !IsInDungeon())  
 registerWhen(register("renderOverlay", () => {
     if (MiningAbilityTimerGui.isOpen() && !startTime) {
         Renderer.scale(idkwhatimdoing.MiningAbilityTimerGui.scale)
