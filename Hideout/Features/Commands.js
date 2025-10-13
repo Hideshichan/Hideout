@@ -7,15 +7,15 @@ mpwToggle = false
 export function sayCommands() {
   ChatLib.chat('\n&3&lCOMMANDS:')
   ChatLib.chat('&d----------------------------------------------\n')
-  new Message().addTextComponent(new TextComponent('&6/hideout (Aliases: /ho, /hide)').setClickValue('/ho').setClickAction('run_command')).addTextComponent(new TextComponent('- &aOpens the gui\n')).chat()
+  ChatLib.chat('&6 /hideout (Aliases: /ho, /hide) - &aOpens the config gui\n')
   ChatLib.chat('&d----------------------------------------------\n')
-  new Message().addTextComponent(new TextComponent('&6/hideouthelp (Alias: /hohelp)').setClickValue('/hohelp').setClickAction('run_command')).addTextComponent(new TextComponent('- &aShows this help menu\n')).chat()
+  ChatLib.chat('&6 /hideouthelp (Alias: /hohelp) - &aShows this help menu\n')
   ChatLib.chat('&d----------------------------------------------\n')
-  new Message().addTextComponent(new TextComponent('&6/hideoutjoinhelp (Alias: /hojhelp)').setClickValue('/hothelp').setClickAction('run_command')).addTextComponent(new TextComponent('- &aDisplays all the options for joininstance commands\n')).chat()
+  ChatLib.chat('&6 /hideoutjoinhelp (Alias: /hojhelp) - &aDisplays all the options for joininstance commands\n')
   ChatLib.chat('&d----------------------------------------------\n')
-  new Message().addTextComponent(new TextComponent('&6/ep (Aliases: /epearl, /epearls, /pearls)').setClickValue('/ep').setClickAction('run_command')).addTextComponent(new TextComponent('- &aFills stack of pearls\n')).chat()
+  ChatLib.chat('&6 /ep (Aliases: /epearl, /epearls, /pearls) - &aFills stack of pearls\n')
   ChatLib.chat('&d----------------------------------------------\n')
-  new Message().addTextComponent(new TextComponent('&6/ij (Aliases: /ijerry, /ijerrys, /jerrys, /jerries, /ijerries)').setClickValue('/ij').setClickAction('run_command')).addTextComponent(new TextComponent('- &aFills stack of inflatable jerries\n')).chat()
+  ChatLib.chat('&6 /ij (Aliases: /ijerry, /ijerrys, /jerrys, /jerries, /ijerries) - &aFills stack of inflatable jerries\n')
   ChatLib.chat('&d----------------------------------------------\n')
   ChatLib.chat('&3 /t{tier} - Enters into the given Kuudra tier\n')
   ChatLib.chat('&d----------------------------------------------\n')
@@ -23,9 +23,11 @@ export function sayCommands() {
   ChatLib.chat('&d----------------------------------------------\n')
   ChatLib.chat('\n&3&lPARTY COMMANDS:')
   ChatLib.chat('&d----------------------------------------------\n')
-  ChatLib.chat('&3 !rifttime - Sends your remaining rift time to party chat\n')
+  ChatLib.chat('&3 !rifttime - Sends your remaining rift time to party chat (Only works when in the rift)\n')
   ChatLib.chat('&d----------------------------------------------')
   ChatLib.chat('&3 /mpw <player1,player2,...> - Sends a party invite to the given players and warps after they all join, will NOT disband after\n')
+  ChatLib.chat('&d----------------------------------------------\n')
+  ChatLib.chat('\n&3&lMINING COMMANDS:')
   ChatLib.chat('&d----------------------------------------------\n')
   ChatLib.chat('&3 /swapskymallvalue - Swaps the value of skymall 20% cooldown reduction (from true -> false and vice versa) Useful for testing\n')
   ChatLib.chat('&d----------------------------------------------\n')
@@ -92,6 +94,9 @@ function warpParty() {
 }
 
 register("command", (players) =>{
+  if (players == "help") {
+    branding("Usage: /mpw <player1,player2,...>\nSends a party invite to the given players and warps after they all join, will NOT disband after")
+  }
   if (!players) {
     branding("Please enter a name(s).\nSeparate names with a comma and no space (eg: /mpw Deathstreeks,Breefing,15h)")
   }
@@ -106,7 +111,7 @@ register("command", (players) =>{
     timeout += 500
     playercount++
   })
-}).setCommandName("mpw")
+}).setCommandName("multiplayerwarp").setAliases("mpw")
 
 registerWhen(
   register("chat", () => {

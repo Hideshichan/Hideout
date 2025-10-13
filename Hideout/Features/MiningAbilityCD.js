@@ -2,7 +2,7 @@ import config from "../data/config"
 import { MiningAbilityTimerGui } from "../data/config"
 import { idkwhatimdoing } from "../utils/idk"
 import { registerWhen } from "../../BloomCore/utils/Utils"
-import { branding } from "../utils/stuff"
+import { branding, RED, RESET, GREEN, GOLD, YELLOW, DARK_RED } from "../utils/stuff"
 
 let colors = ["§0", "§1", "§2", "§3", "§4", "§5", "§6", "§7", "§8", "§9", "§a", "§b", "§c", "§d", "§e", "§f"]
 let startTime, currenttank, cooldown, modified
@@ -23,7 +23,6 @@ let skymall = {
 }
 let skymall_toggle = false
 let bal_equipped = false
-let blegg = false
 let cooldowns = {
     "Mining Speed Boost1" : 120000,
     "Mining Speed Boost2" : 120000,
@@ -45,9 +44,9 @@ let cooldowns = {
     "Gemstone Infusion2" : 120000,
     "Gemstone Infusion3" : 120000,
 
-    "Anomalous Desire1" : 120000,
-    "Anomalous Desire2" : 110000,
-    "Anomalous Desire3" : 100000,
+    "Tunnel Vision1" : 120000,
+    "Tunnel Vision2" : 110000,
+    "Tunnel Vision3" : 100000,
 }
 let level = 1
 let lastability = ""
@@ -79,28 +78,91 @@ function checkForBlegg() {
     return nbt.tag.ExtraAttributes.drill_part_upgrade_module === "goblin_omelette_blue_cheese";
 }
 
+function getTankColor(tank) {
+    if (tank === "perfectly_cut_fuel_tank") return GREEN;
+    if (tank === "gemstone_fuel_tank") return GOLD;
+    if (tank === "titanium_fuel_tank") return YELLOW;
+    if (tank === "mithril_fuel_tank") return RED;
+    if (tank === "none") return DARK_RED;
+    return RESET; // Default for any unknown tank
+}
+
+function calculateCooldown(ability) {
+    if (!ability) return null;
+    level = 1 + config().PotMCheck + checkForBlegg() // This adds a level if PotM is lvl 2+ and another if Blegg is equipped, so lvl 3 total
+    currenttank = getfueltank()
+    const baseCooldown = cooldowns[ability + level.toString()];
+
+    return cooldown = Math.floor((baseCooldown * tanks[currenttank] * bal[bal_equipped.toString()] * skymall[skymall_toggle.toString()]) / 1000);
+    //branding(`Cooldown of ${ability} after reductions: ${cooldown}s`)
+}
+
 register('command', () => {
     branding("Debug info for Mining Ability Cooldown Timer:")
     level = 1 + config().PotMCheck + checkForBlegg()
-    branding(`Last ability used: ${lastability}, cooldown before reductions: ${cooldowns[ability+level.toString()]}s`)
+    
+    if (lastability === "") {
+        branding("No ability used yet - use a mining ability or do /setability <abilityname>")
+        return
+    }
+    
+    branding(`Last ability used: ${lastability}, cooldown before reductions: ${cooldowns[lastability+level.toString()]}s`)
     bal_equipped = balTabCheck()
-    branding(`Bal: ${bal_equipped}`)
-    branding(`Skymall: ${skymall_toggle}`)
-    branding(`Tank: ${getfueltank()}`)
-    branding(`Blegg: ${checkForBlegg()}`)
+    const clickableMessage = new Message(
+        new TextComponent(`§bHideout §8» §rBal: ${bal_equipped ? GREEN : RED}${bal_equipped}${RESET}`).setClick("run_command", "/swapbalvalue").setHoverValue('Click if incorrect!'),
+        new TextComponent(`\n§bHideout §8» §rSkymall: ${skymall_toggle ? GREEN : RED}${skymall_toggle}${RESET}`).setClick("run_command", "/swapskymallvalue").setHoverValue('Click if incorrect!')
+    );
+    ChatLib.chat(clickableMessage)
+    //branding(`Bal: ${bal_equipped}`)
+    //branding(`Skymall: ${skymall_toggle}`)
+    branding(`Tank: ${getTankColor(getfueltank())}${getfueltank()}${RESET}`)
+    branding(`Blegg: ${checkForBlegg() ? GREEN : RED}${checkForBlegg()}${RESET}`)
     branding(`Level: ${level}`)
-    branding(`Cooldown of ${lastability} after reductions: ${Math.floor((cooldown * tanks[currenttank] * bal[bal_equipped.toString()] * skymall[skymall_toggle.toString()]) / 1000)}s`)
+
+    branding(`Cooldown of ${lastability} after reductions: ${calculateCooldown(lastability)}s\n`)
 }).setName('debugmac')
 
 register('command', () => {
-    branding(`Skymall set from ${skymall_toggle} to ${!skymall_toggle}`)
+    const oldValue = skymall_toggle;
     skymall_toggle = !skymall_toggle // Just incase it bugs like usual
+    
+    const clickableMessage = new Message(
+        new TextComponent(`§bHideout §8» §rSkymall set from ${oldValue ? GREEN : RED}${oldValue}${RESET} to ${skymall_toggle ? GREEN : RED}${skymall_toggle}${RESET}`).setClick("run_command", "/swapskymallvalue").setHoverValue('Click to toggle again!')
+    );
+    ChatLib.chat(clickableMessage)
+    
+    branding(`Cooldown of ${lastability} after change: ${calculateCooldown(lastability)}s`)
 }).setName('swapskymallvalue')
 
 register('command', () => {
-    branding(`Bal set from ${bal_equipped} to ${!bal_equipped}`)
+    const oldValue = bal_equipped;
     bal_equipped = !bal_equipped // Just incase ur using bal and not rod swap
+    
+    const clickableMessage = new Message(
+        new TextComponent(`§bHideout §8» §rBal set from ${oldValue ? GREEN : RED}${oldValue}${RESET} to ${bal_equipped ? GREEN : RED}${bal_equipped}${RESET}`).setClick("run_command", "/swapbalvalue").setHoverValue('Click to toggle again!')
+    );
+    ChatLib.chat(clickableMessage)
+    
+    branding(`Cooldown of ${lastability} after change: ${calculateCooldown(lastability)}s`)
 }).setName('swapbalvalue')
+
+register('command', (ability) => {
+    if (!ability) {
+        branding("Invalid ability name! Valid names are: Mining Speed Boost, Maniac Miner, Pickobulus, Sheer Force, Gemstone Infusion, Tunnel Vision")
+        return
+    }
+    
+    // Find the correct ability name with case-insensitive matching
+    const correctAbility = Object.keys(cooldowns).find(ab => ab.toLowerCase().startsWith(ability.toLowerCase()))?.replace(/\d+$/, '')
+    
+    if (!correctAbility) {
+        branding("Invalid ability name! Valid names are: Mining Speed Boost, Maniac Miner, Pickobulus, Sheer Force, Gemstone Infusion, Tunnel Vision")
+        return
+    }
+    
+    lastability = correctAbility
+    branding(`Ability manually set to ${correctAbility}. Use /debugmac to see info.`)
+}).setName('setability')
 
 function balTabCheck() {
     const tablist = TabList.getNames();
@@ -144,7 +206,7 @@ registerWhen(register("chat", (ability) => {
     startTime = Date.now()
     cooldown = cooldowns[ability+level.toString()]
     modified = Math.floor((cooldown * tanks[currenttank] * bal[bal_equipped.toString()] * skymall[skymall_toggle.toString()]) / 1000)
-}).setCriteria(/You used your (Mining Speed Boost|Maniac Miner|Pickobulus|Sheer Force|Gemstone Infusion|Anomalous Desire) Pickaxe Ability!/), () => config().MiningAbilityTimer)
+}).setCriteria(/You used your (Mining Speed Boost|Maniac Miner|Pickobulus|Sheer Force|Gemstone Infusion|Tunnel Vision) Pickaxe Ability!/), () => config().MiningAbilityTimer)
 
 registerWhen(register("renderOverlay", () => {
     if (MiningAbilityTimerGui.isOpen() && !startTime) {

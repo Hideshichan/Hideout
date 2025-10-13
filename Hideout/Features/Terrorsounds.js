@@ -1,5 +1,5 @@
 import config from '../data/config'
-import { registerWhen, getSkyblockItemID } from "../../BloomCore/utils/Utils"
+import { registerWhen } from "../../BloomCore/utils/Utils"
 
 function IsWearingTerror() {
     const helmet = Player.armor.getHelmet()

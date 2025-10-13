@@ -17,6 +17,10 @@ registerWhen(register("chat", () => {
 
 // !rifttime command
 registerWhen(register("chat", () => {
+    if (getCurrentWorld() != "The Rift") {
+        ChatLib.command(`pc I am not in the rift!`)
+        return
+    }
     const tablist = TabList.getNames();
     let RiftTimeString = tablist.findIndex(tab => tab.startsWith(`§r§b§lGood to know:`));
     RiftTime = tablist[RiftTimeString + 3]
@@ -27,4 +31,4 @@ registerWhen(register("chat", () => {
     else {
         ChatLib.command(`pc Command Failed!`)
     }
-}).setCriteria(/Party >( .+)? (\w+): !rifttime/), () => config().RiftCommands && getCurrentWorld() == "The Rift")
+}).setCriteria(/Party >( .+)? (\w+): !rifttime/), () => config().RiftCommands)

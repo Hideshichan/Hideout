@@ -36,7 +36,7 @@ export function branding(msg) {
     ChatLib.chat("§bHideout §8» §r" + msg)
 }
 
-// Closes your game. Credit to Noamm9
+// Closes your game.
 export function CloseGame() {
     Client.getMinecraft().func_71400_g()
 }
@@ -48,8 +48,6 @@ export const getModuleVersion = () => JSON.parse(FileLib.read("Hideout", "metada
  *
  * @param {string} [message=""] - The message to be displayed to the player when they are disconnected.
  * 
- * Credit to Noamm9 (pro coder that i steal from LMAO)
- * Link to his mod: https://github.com/Noamm9/NoammAddons-CT
  */
 export function DisconnectFromServer(message= "") {
     Client.getMinecraft().func_147114_u()
@@ -69,7 +67,6 @@ export function DisconnectFromServer(message= "") {
  * @param {number} [a=255] - The alpha component of the color (0-255).
  * @param {number} [lineWidth=3.5] - The width of the line.
  * 
- * Again, credits to Noamm9 (my module is gonna be urs at this rate)
  */
 export function drawTrace(x, y, z, r, g, b, a = 255, lineWidth = 3.5) {
   GlStateManager.func_179094_E()
@@ -100,8 +97,6 @@ export function drawTrace(x, y, z, r, g, b, a = 255, lineWidth = 3.5) {
   GlStateManager.func_179121_F()
 }
 
-// Please Noamm, let me code some stuff myself :sob:
-// But fr credits to him, none of the rework (and my motivation) could be possible w/o him
 
 const P3Sections = [
   { corner1: { x: 90, y: 158, z: 123 }, corner2: { x: 111, y: 105, z: 32 } }, // 1
