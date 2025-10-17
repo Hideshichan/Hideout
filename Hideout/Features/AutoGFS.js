@@ -94,10 +94,12 @@ function Leaps() {
 
 register("command", Pearls).setCommandName("ep").setAliases(["epearl", "epearls", "pearls"])
 register("command", Jerry).setCommandName("ij").setAliases(["ijerry", "ijerrys", "jerrys", "jerries", "ijerries"])
+register("command", BOOM).setCommandName("sb").setAliases(["superboom", "superboomtnt", "boom", "tnt"])
+register("command", Leaps).setCommandName("sl").setAliases(["spiritleap", "leap", "leaps"])
 
 registerWhen(register("chat", BOOM).setCriteria("Starting in 4 seconds."), () => config().AutoGFS && config().GFSBoom)
 registerWhen(register("chat", Pearls).setCriteria("Starting in 3 seconds."), () => config().AutoGFS && config().GFSPearls)
-registerWhen(register("chat", Leaps).setCriteria("Starting in 2 second."), () => config().AutoGFS && config().GFSLeaps)
+registerWhen(register("chat", Leaps).setCriteria("Starting in 2 seconds."), () => config().AutoGFS && config().GFSLeaps)
 registerWhen(register("chat", Jerry).setCriteria("Starting in 1 seconds."), () => config().AutoGFS && config().GFSJerry)
 
 registerWhen(register("chat", (regex, msg) => {
