@@ -23,6 +23,8 @@ let skymall = {
 }
 let skymall_toggle = false
 let bal_equipped = false
+let bal_buff = 0
+let bal_level = 0
 let cooldowns = {
     "Mining Speed Boost1" : 120000,
     "Mining Speed Boost2" : 120000,
@@ -75,6 +77,14 @@ function getTankColor(tank) {
     return RESET; // Default for any unknown tank
 }
 
+function getBalLevelColor(level) {
+    if (level >= 81) return GREEN;
+    if (level >= 61) return GOLD;
+    if (level >= 41) return YELLOW;
+    if (level >= 21) return RED;
+    return DARK_RED; // 1-20
+}
+
 function checkForBlegg() {
     const heldItem = Player.getHeldItem();
     if (!heldItem) return false;
@@ -93,8 +103,10 @@ function calculateCooldown(ability) {
     currenttank = getfueltank()
     const baseCooldown = cooldowns[ability + level.toString()];
 
-    return cooldown = Math.floor((baseCooldown * tanks[currenttank] * bal[bal_equipped.toString()] * skymall[skymall_toggle.toString()]) / 1000);
-    //branding(`Cooldown of ${ability} after reductions: ${cooldown}s`)
+    // Only use bal_buff if bal is actually equipped, otherwise no reduction (1.0)
+    const balReduction = bal_equipped && bal_buff > 0 ? bal_buff : 1.0
+    
+    return cooldown = Math.floor((baseCooldown * tanks[currenttank] * balReduction * skymall[skymall_toggle.toString()]) / 1000);
 }
 
 register('command', () => {
@@ -108,8 +120,9 @@ register('command', () => {
     
     branding(`Last ability used: ${lastability}, cooldown before reductions: ${cooldowns[lastability+level.toString()]}s`)
     bal_equipped = balTabCheck()
+    
     const clickableMessages = new Message(
-        new TextComponent(`§bHideout §8» §rBal: ${bal_equipped ? GREEN : RED}${bal_equipped}${RESET}`).setClick("run_command", "/swapbalvalue").setHoverValue('Click if incorrect!'),
+        new TextComponent(`§bHideout §8» §rBal: ${bal_equipped ? GREEN : RED}${bal_equipped}${RESET}, Level: ${getBalLevelColor(bal_level)}${bal_level}${RESET}`).setHoverValue('Use /setballevel to manually set bal level'),
         new TextComponent(`\n§bHideout §8» §rSkymall: ${skymall_toggle ? GREEN : RED}${skymall_toggle}${RESET}`).setClick("run_command", "/swapskymallvalue").setHoverValue('Click if incorrect!')
     );
 
@@ -135,17 +148,46 @@ register('command', () => {
     branding(`Cooldown of ${lastability} after change: ${calculateCooldown(lastability)}s`)
 }).setName('swapskymallvalue')
 
-register('command', () => {
-    const oldValue = bal_equipped;
-    bal_equipped = !bal_equipped // Just incase ur using bal and not rod swap
+register('command', (level) => {
+    if (!level) {
+        branding("Please specify a bal level after the command (0-100)")
+        branding("Usage: /setballevel <level> (use 0 to disable)")
+        return
+    }
     
-    const clickableMessage = new Message(
-        new TextComponent(`§bHideout §8» §rBal set from ${oldValue ? GREEN : RED}${oldValue}${RESET} to ${bal_equipped ? GREEN : RED}${bal_equipped}${RESET}`).setClick("run_command", "/swapbalvalue").setHoverValue('Click to toggle again!')
-    );
-    ChatLib.chat(clickableMessage)
+    const balLevel = parseInt(level)
     
-    branding(`Cooldown of ${lastability} after change: ${calculateCooldown(lastability)}s`)
-}).setName('swapbalvalue')
+    // Check if it's a valid number
+    if (isNaN(balLevel)) {
+        branding("Invalid level! Please enter a number between 0 and 100")
+        return
+    }
+    
+    // Check if it's in valid range
+    if (balLevel < 0 || balLevel > 100) {
+        branding("Invalid level! Please enter a number between 0 and 100")
+        return
+    }
+    
+    const oldBuff = bal_buff
+    
+    if (balLevel === 0) {
+        bal_buff = 0
+        bal_equipped = false
+        bal_level = 0
+        branding("Bal manually disabled - no cooldown reduction")
+    } else {
+        bal_buff = 1 - (balLevel * 0.001) // Each level = 0.1% reduction, so multiply by 0.001
+        bal_equipped = true // Set to true since we're manually setting a level
+        bal_level = balLevel
+        branding(`Bal level manually set to ${balLevel}`)
+        branding(`Cooldown reduction changed from ${((1 - oldBuff) * 100).toFixed(1)}% to ${(1 - (balLevel * 0.001)).toFixed(1)}%`)
+    }
+    
+    if (lastability) {
+        branding(`Cooldown of ${lastability} after change: ${calculateCooldown(lastability)}s`)
+    }
+}).setName('setballevel').setAliases('sbl')
 
 register('command', (ability) => {
     if (!ability) {
@@ -174,22 +216,30 @@ function balTabCheck() {
     }
     balCheck = tablist[balString + 1]
     balCheck = balCheck.removeFormatting()
-    if (balCheck.includes("[Lvl 100] Bal")) {
+    if (balCheck.includes("Bal")) {
+        bal_level = parseInt(balCheck.match(/\[Lvl (\d+)\]/)[1]) || 0;
+        bal_buff = 1 - (bal_level * 0.001) // Fixed: should be 0.001 for 0.1% per level
         branding("Bal found as equipped in tab. Automatically applying cooldown reduction.")
         return true
     }
     else {
+        bal_level = 0 // Reset level when bal not equipped
+        branding("Bal not equipped.")
         return false
     }
 }
 
-registerWhen(register("chat", () =>{
+register("chat", (level) =>{
     bal_equipped = true
-}).setCriteria("Autopet equipped your [Lvl 100] Bal! VIEW RULE"), () => config().MiningAbilityTimer)
+    bal_level = parseInt(level)
+    bal_buff = 1 - (bal_level * 0.001) // Fixed: should be 0.001 for 0.1% per level
+}).setCriteria(/Autopet equipped your \[Lvl (\d+)\] Bal! VIEW RULE/)
 
-registerWhen(register("chat", () =>{
+register("chat", () =>{
     bal_equipped = false
-}).setCriteria(/Autopet equipped your \[Lvl \d+\] (?!Bal\b)([A-Za-z]+(?: [A-Za-z]+)*)! VIEW RULE/), () => config().MiningAbilityTimer)
+    bal_level = 0
+    bal_buff = 0 // Reset bal buff when non-bal pet is equipped
+}).setCriteria(/Autopet equipped your \[Lvl \d+\] (?!Bal\b)([A-Za-z]+(?: [A-Za-z]+)*)! VIEW RULE/)
 
 register("chat", () =>{
     skymall_toggle = true
@@ -206,7 +256,10 @@ registerWhen(register("chat", (ability) => {
     currenttank = getfueltank()
     startTime = Date.now()
     cooldown = cooldowns[ability+level.toString()]
-    modified = Math.floor((cooldown * tanks[currenttank] * bal[bal_equipped.toString()] * skymall[skymall_toggle.toString()]) / 1000)
+    
+    // Use the same logic as calculateCooldown function
+    const balReduction = bal_equipped && bal_buff > 0 ? bal_buff : 1.0
+    modified = Math.floor((cooldown * tanks[currenttank] * balReduction * skymall[skymall_toggle.toString()]) / 1000)
 }).setCriteria(/You used your (Mining Speed Boost|Maniac Miner|Pickobulus|Sheer Force|Gemstone Infusion|Tunnel Vision) Pickaxe Ability!/), () => config().MiningAbilityTimer && !IsInDungeon())  
 
 registerWhen(register("renderOverlay", () => {

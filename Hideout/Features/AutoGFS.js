@@ -7,8 +7,10 @@ function Pearls() {
     const PearlStack = Player.getInventory().getItems().find(a => a?.getName() == "§fEnder Pearl")
 
     if (!PearlStack) {
-        ChatLib.command(`gfs ender_pearl 16`)
-        branding("Gave 16 Ender Pearls")
+        setTimeout(() => { // Use settimeout to wait for GFS to not be rate limited (4s timer since joining server)
+            ChatLib.command(`gfs ender_pearl 16`)
+            branding("Gave 16 Ender Pearls")
+        }, 1000)
         return;
     }
 
@@ -19,22 +21,26 @@ function Pearls() {
         return;
     }
 
-    ChatLib.command(`gfs ender_pearl ${PearlstoGive}`)
+    setTimeout(() => {
+        ChatLib.command(`gfs ender_pearl ${PearlstoGive}`)
 
-    if (PearlstoGive == 1) {
-        branding(`Gave ${PearlstoGive} Ender Pearl to fill stack`)
-        return;
-    }
+        if (PearlstoGive == 1) {
+            branding(`Gave ${PearlstoGive} Ender Pearl to fill stack`)
+            return;
+        }
 
-    branding(`Gave ${PearlstoGive} Ender Pearls to fill stack`)
+        branding(`Gave ${PearlstoGive} Ender Pearls to fill stack`)
+    }, 1000)
 }
 
 function Jerry() {
     const JerryStack = Player.getInventory().getItems().find(a => a?.getName() == "§fInflatable Jerry")
 
     if (!JerryStack) {
-        ChatLib.command(`gfs inflatable_jerry 64`)
-        branding("Gave 64 Inflatable Jerry")
+        setTimeout(() => {
+            ChatLib.command(`gfs inflatable_jerry 64`)
+            branding("Gave 64 Inflatable Jerry")
+        }, 1000)
         return;
     }
 
@@ -45,17 +51,20 @@ function Jerry() {
         return;
     }
 
-    ChatLib.command(`gfs inflatable_jerry ${JerrytoGive}`)
-
-    branding(`Gave ${JerrytoGive} Inflatable Jerry to fill stack`)
+    setTimeout(() => {
+        ChatLib.command(`gfs inflatable_jerry ${JerrytoGive}`)
+        branding(`Gave ${JerrytoGive} Inflatable Jerry to fill stack`)
+    }, 1000)
 }
 
 function BOOM() {
     const BoomStack = Player.getInventory().getItems().find(a => a?.getName() == "§9Superboom TNT")
 
     if (!BoomStack) {
-        ChatLib.command(`gfs superboom_tnt 64`)
-        branding("Gave 64 Superboom")
+        setTimeout(() => {
+            ChatLib.command(`gfs superboom_tnt 64`)
+            branding("Gave 64 Superboom")
+        }, 1000)
         return;
     }
 
@@ -66,17 +75,20 @@ function BOOM() {
         return;
     }
 
-    ChatLib.command(`gfs superboom_tnt ${BoomToGive}`)
-
-    branding(`Gave ${BoomToGive} Superboom to fill stack`)
+    setTimeout(() => {
+        ChatLib.command(`gfs superboom_tnt ${BoomToGive}`)
+        branding(`Gave ${BoomToGive} Superboom to fill stack`)
+    }, 1000)
 }
 
 function Leaps() {
     const LeapStack = Player.getInventory().getItems().find(a => a?.getName() == "§9Spirit Leap")
 
     if (!LeapStack) {
-        ChatLib.command(`gfs spirit_leap 16`)
-        branding("Gave 16 Spirit Leaps")
+        setTimeout(() => {
+            ChatLib.command(`gfs spirit_leap 16`)
+            branding("Gave 16 Spirit Leaps")
+        }, 1000)
         return;
     }
 
@@ -87,9 +99,10 @@ function Leaps() {
         return;
     }
 
-    ChatLib.command(`gfs spirit_leap ${LeapsToGive}`)
-
-    branding(`Gave ${LeapsToGive} Spirit Leaps to fill stack`)
+    setTimeout(() => {
+        ChatLib.command(`gfs spirit_leap ${LeapsToGive}`)
+        branding(`Gave ${LeapsToGive} Spirit Leaps to fill stack`)
+    }, 1000)
 }
 
 register("command", Pearls).setCommandName("ep").setAliases(["epearl", "epearls", "pearls"])
@@ -104,4 +117,4 @@ registerWhen(register("chat", Jerry).setCriteria("Starting in 1 seconds."), () =
 
 registerWhen(register("chat", (regex, msg) => {
     cancel(msg)
-}).setCriteria(/Moved .+ (Ender Pearl|Inflatable Jerry) from your Sacks to your inventory\./), () => config().GFSPearls || config().GFSJerry)
+}).setCriteria(/Moved .+ (Ender Pearl|Inflatable Jerry|Spirit Leap|Superboom TNT) from your Sacks to your inventory\./), () => config().GFSPearls || config().GFSJerry || config().GFSLeaps || config().GFSBoom)

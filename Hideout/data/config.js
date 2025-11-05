@@ -95,7 +95,7 @@ const DefaultConf = new DefaultConfig("Hideout", "data/settings.json")
     category: "Mining",
     configName: "MiningAbilityTimer",
     title: "Mining ability cooldown tracker",
-    description: "A (what should be) accurate mining ability cooldown timer",
+    description: "A (what should be) accurate mining ability cooldown timer\nOnly currently support lvl 100 Bal",
     subcategory: ""
 })
 .addButton({
